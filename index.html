@@ -491,6 +491,48 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 	}() );
 	
 </script>
+	<?php
+session_start();
+
+// Função para obter o IP do usuário
+function getUserIP() {
+    if (!empty($_SERVER['HTTP_CLIENT_IP'])) {
+        $ip = $_SERVER['HTTP_CLIENT_IP'];
+    } elseif (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
+        $ip = $_SERVER['HTTP_X_FORWARDED_FOR'];
+    } else {
+        $ip = $_SERVER['REMOTE_ADDR'];
+    }
+    return $ip;
+}
+
+// Obter o IP do usuário
+$userIP = getUserIP();
+
+// Armazenar os IPs que já giraram a roleta (simulação com array, pode ser substituído por banco de dados)
+$usedIPs = isset($_SESSION['used_ips']) ? $_SESSION['used_ips'] : [];
+
+// Verificar se o IP já girou a roleta
+if (in_array($userIP, $usedIPs)) {
+    echo "Você já usou a sua chance";
+} else {
+    // Adiciona o IP à lista de IPs que já giraram a roleta
+    $usedIPs[] = $userIP;
+    $_SESSION['used_ips'] = $usedIPs;
+
+    // Exibir o botão para girar a roleta
+    echo '<button onclick="girarRoleta()">Girar a Roleta</button>';
+}
+
+?>
+
+<script>
+function girarRoleta() {
+    alert("Roleta girada!");
+    // Adicione a lógica da roleta aqui
+}
+</script>
+
 <script src="./Girou, Ganhou!_files/webpack-pro.runtime.min.js.download" id="elementor-pro-webpack-runtime-js"></script>
 <script src="./Girou, Ganhou!_files/webpack.runtime.min.js.download" id="elementor-webpack-runtime-js"></script>
 <script src="./Girou, Ganhou!_files/jquery.min.js.download" id="jquery-core-js"></script>
